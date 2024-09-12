@@ -20,35 +20,40 @@ let rec fold_right (f:('a -> 'b -> 'b)) (lst:'a list) (acc:'b) : 'b = match lst 
   | [] -> acc 
   | h::t -> f h (fold_right f t acc);;
 
-let rec fold_left (f:('a -> 'b -> 'a))(acc:'a) (lst:'b list) : ('a) = match lst with 
+let rec fold_left (f:('a -> 'b -> 'a)) (acc:'a) (lst:'b list) : ('a) = match lst with 
   | [] -> acc
-  | h :: t -> fold_left f (f acc h) t    ;;
+  | h :: t -> fold_left f (f acc h) t;;
 
 
 (*>* Trees *>*)
 type 'a tree =
-    NULL
-  | Node of 'a * 'a tree * 'a tree ;;
-
+  | NULL
+  | Node of 'a * 'a tree * 'a tree;;
 
 (*>* Problem 1 *>*)
-type 'a threetree ;;
+type 'a threetree = 
+| NULL3
+| Node3 of 'a * 'a threetree * 'a threetree * 'a threetree;;
   
 (*>* Problem 2 *>*)
-let rec insertlm (tr: 'a threetree) (data:'a) : ('a threetree) =
-raise Unimplemented
+let rec insertlm (tr: 'a threetree) (data:'a) : ('a threetree) = match tr with
+| NULL3 -> Node3 (data, NULL3, NULL3, NULL3)
+| Node3 (n, l, m, r) -> Node3 (n, insertlm l data, m, r);;
 
 (*>* Problem 3 *>*)
-let rec isbst (tr:'a tree) : (bool) = 
-raise Unimplemented
+let rec isbst (tr:'a tree) : (bool) = match tr with
+| NULL -> true
+| Node (n, l, r) -> if isbst r then true else false;; 
 
 (*>* Problem 4 *>*)
-let rec treemap  (tr:'a tree) (f:('a -> 'b)): ('b tree)=
-raise Unimplemented
+let rec treemap (tr:'a tree) (f:('a -> 'b)) : ('b tree) = match tr with
+| NULL -> NULL
+| Node (n, l, r) -> Node (f n, treemap l f, treemap r f);;
 
 (*>* Problem 5 *>*)
-let bexp (lst:int list) (m:int) =
-raise Unimplemented
+let bexp (lst:int list) (m:int) = 
+  let rec exp x b = if b = 0 then 1 else x * exp x (b-1)
+  in fold_left (fun acc e -> acc + exp m e) 0 lst;;
 
 (*>* Problem 6 *>*)
 let lastel (lst:int list) : (int) =
