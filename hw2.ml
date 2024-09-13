@@ -41,9 +41,12 @@ let rec insertlm (tr: 'a threetree) (data:'a) : ('a threetree) = match tr with
 | Node3 (n, l, m, r) -> Node3 (n, insertlm l data, m, r);;
 
 (*>* Problem 3 *>*)
-let rec isbst (tr:'a tree) : (bool) = match tr with
-| NULL -> true
-| Node (n, l, r) -> if isbst r then true else false;; 
+
+let rec isbst (tr:'a tree) : (bool) = let rec compare tr min max = 
+  match tr with
+    | NULL -> true
+    | Node (n, l, r) -> n > min && n < max && compare l min n && compare r n max 
+in compare tr min_int max_int;; 
 
 (*>* Problem 4 *>*)
 let rec treemap (tr:'a tree) (f:('a -> 'b)) : ('b tree) = match tr with
@@ -56,13 +59,7 @@ let bexp (lst:int list) (m:int) =
   in fold_left (fun acc e -> acc + exp m e) 0 lst;;
 
 (*>* Problem 6 *>*)
-let lastel (lst:int list) : (int) =
-raise Unimplemented
+let lastel (lst:int list) : (int) = fold_left (fun _ x -> x) ~-1 lst;;
 
 (*>* Problem 7 *>*)
-let blistb (lst:bool list): (int) = 
-raise Unimplemented
-
-
-
-
+let blistb (lst:bool list): (int) = fold_right (fun x acc -> if x then 1 else 0) lst 0  ;;  
